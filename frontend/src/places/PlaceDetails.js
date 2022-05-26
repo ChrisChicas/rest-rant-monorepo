@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useHistory, useParams } from "react-router"
+import { CurrentUser } from "../contexts/CurrentUser";
 import CommentCard from './CommentCard'
 import NewCommentForm from "./NewCommentForm";
 
 function PlaceDetails() {
+
+	const {currentUser} = useContext(CurrentUser)
 
 	const { placeId } = useParams()
 
@@ -30,7 +33,10 @@ function PlaceDetails() {
 
 	async function deletePlace() {
 		await fetch(`http://localhost:5000/places/${place.placeId}`, {
-			method: 'DELETE'
+			method: 'DELETE',
+			headers: {
+				"Authorization": `Bearer ${localStorage.getItem("token")}`,
+			}
 		})
 		history.push('/places')
 	}
@@ -40,7 +46,7 @@ function PlaceDetails() {
 			method: 'DELETE',
 			headers: {
 				"Authorization": `Bearer ${localStorage.getItem("token")}`,
-			},
+			}
 		})
 
 		setPlace({
@@ -105,6 +111,20 @@ function PlaceDetails() {
 		})
 	}
 
+	let placeActions = null
+
+	if(currentUser?.role === "admin"){
+		placeActions = (
+			<div>
+				<a className="btn btn-warning" onClick={editPlace}>
+					Edit
+				</a>
+				<button type="submit" className="btn btn-danger" onClick={deletePlace}>
+					Delete
+				</button>	
+			</div>
+		)
+	}
 
 	return (
 		<main>
@@ -132,12 +152,7 @@ function PlaceDetails() {
 						Serving {place.cuisines}.
 					</h4>
 					<br />
-					<a className="btn btn-warning" onClick={editPlace}>
-						Edit
-					</a>{` `}
-					<button type="submit" className="btn btn-danger" onClick={deletePlace}>
-						Delete
-					</button>
+					{placeActions}
 				</div>
 			</div>
 			<hr />
