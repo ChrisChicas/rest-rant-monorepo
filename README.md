@@ -1,7 +1,10 @@
 # Project REST-Rant
-REST-Rant is an app where users can review restaurants.
+REST-Rant is an app where users can review restaurants by signing up/logging in to their accounts and selecting a restaurant to leave a comment/review on. BCrypt and JWTs are used for password hashing and session management. Role based authorization is enforced and reviewers are only allowed to comment/delete their own comments while admins can manipulate restaurant information.
 
-### Setup
+### Issues
+Besides running locally, no set up running demo as of yet.
+
+### Technical Information/Technologies
 First, you'll need a Postgres database to connect to. Follow instructions here to setup the database and save credentials for the next step.
 
 Next create a `.env` file inside of `backend`. It will need to contain the following environment variables (change the values for the database to match what you defined in the previous step)
@@ -10,6 +13,7 @@ PORT=5000
 DB_USERNAME=rest_rant_user
 DB_PASSWORD=password
 DB_DATABASE=rest_rant
+JWT_SECRET={any random string}
 ```
 
 Next `cd` into `backend` and run `npm install` to install dependencies for the API.
@@ -17,6 +21,8 @@ Next `cd` into `backend` and run `npm install` to install dependencies for the A
 Next, `cd` into `frontend`, and run `npm install` to install dependencies for the React app.
 
 Finally, in separate terminals, run `npm start` in each folder so that the API and React app are running at the same time.
+
+You can seed data into your Postgres DB by running the command: npx sequelize-cli db:seed --seed {seeder file name}.js to add test restaurants and an admin with authorization to manage restaurants.
 
 ### API (http://localhost:5000)
 | Method | Path                                 | Purpose                                   |
